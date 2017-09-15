@@ -1,0 +1,111 @@
+[user]
+  name  = firstname lastname / organisation
+  email = flast@orga.net
+[core]
+  editor           = vim
+  excludesfile     = ~/.gitLib/conf/ignore_global
+  fileMode         = false
+  sharedRepository = group
+[merge]
+  tool         = vimdiff
+[alias]
+  # BASICS
+  ci           = commit
+  cia          = commit --amend
+  co           = checkout
+
+  # STATUS
+  s            = st
+  tst          = st
+  stm          = st --modified
+  sta          = st --added
+  std          = st --deleted
+  s2a          = st --to-add
+  stmv         = st --modifiedv
+  stav         = st --addedv
+  stdv         = st --deletedv
+  s2av         = st --to-addv
+
+  # BRANCHES ACTIONS
+  pwd          = br --pwd
+  bra          = br --all
+  who          = br --who
+  whop         = br --who-porcelain
+  old          = br --old-pwd
+  sw           = br --switch
+  swh          = br --switch-history
+  mine         = br --mine
+  m9           = br --mine-porcelain
+  m8           = br --mine-short-porcelain
+  dev          = "! git branch -a | grep develop"
+  rel          = "! git branch -a | grep release"
+  relu         = br --release-unmerged # display all released branches unmerged in
+
+  # INDEX
+  empty        = "! f(){ git add -N $1; }; f" # new empty file
+  assume       = update-index --assume-unchanged # ignore futures modifications
+  unassume     = update-index --no-assume-unchanged # un-ignore futures modifications
+
+  # LOG
+  lg           = l -g
+  la           = l -a
+  lgs          = l -g -s
+  lga          = l -g -a
+  # log not in origin/develop
+  ln           = l --not
+  lns          = l --not --short
+
+  # DIFF & MERGE
+  df           = diff -U5
+  dfs          = diff --name-only # diff short
+  dfc          = diff -U5 --cached
+  dft          = difftool -y
+  mg           = merge -X ignore-space-change -X ignore-all-space -X ignore-space-at-eol
+  mgn          = merge -X ignore-space-change -X ignore-all-space -X ignore-space-at-eol --no-commit
+  mgt          = mergetool -y
+  mga          = merge --abort
+  
+  # PUSH
+  pushf        = push --force
+  pushu        = "!git push --set-upstream origin `git pwd`"
+
+  # ADVANCED REBASE ALIASES
+  rb           = rebase -X ignore-space-change -X ignore-all-space -X ignore-space-at-eol -X ignore-blank-lines -X "diff-algorithm=histogram"
+  rbii         = rebase -X ignore-space-change -X ignore-all-space -X ignore-space-at-eol -X ignore-blank-lines --interactive
+  rbi          = rebase --interactive
+  rba          = rebase --abort
+  rbc          = rebase --continue
+  rbs          = rebase --skip
+
+  # BISECT
+  bss          = bisect start
+  bsb          = bisect bad
+  bsg          = bisect good
+  bsr          = bisect reset
+  bsrun        = bisect run
+
+  # ADVANCED LOG FORMATS
+  stat         = log --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev=8 --abbrev-commit --date=iso --stat
+  lp           = log --abbrev=8 --abbrev-commit --date=iso --patch
+  lh           = log --abbrev=8 --abbrev-commit --date=iso --patch --histogram
+
+  # ADVANCED STASH COMMANDS
+  sts          = stash --keep-index
+  pop          = stash pop
+  save         = "! f() { local mess=\"$@\"; while [ -z \"$mess\" ] ; do echo -n \"give me a message : \" && read mess; done; git stash save -u \"$mess\"; }; f"
+  ls           = stash list
+  list         = stash list
+
+[color]
+  branch       = auto
+  diff         = auto
+  status       = auto
+  interactive  = auto
+[pull]
+  default      = simple
+[push]
+  default      = simple
+[commit]
+  template     = ~/.gitLib/conf/commit-message.txt
+[init]
+  templatedir  = ~/.gitLib/conf/templates/

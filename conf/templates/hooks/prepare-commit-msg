@@ -1,0 +1,18 @@
+#!/bin/bash
+ci_file="$1" # the path to the file that holds the commit message so far,
+ci_type="$2" # the type of commit,
+ci_sha1="$3" # and the commit SHA-1 if this is an amended commit
+
+case $ci_type in
+  squash)   ;;
+  merge)    ;;
+  template|"")
+    branch=`git symbolic-ref HEAD 2> /dev/null | sed 's#refs/heads/##'`
+    if [ ! -z "$branch" ] ; then
+      sed -i 's#{branch}#'$branch'#' $ci_file
+    else
+      sed -i 's#{branch}#{NO BRANCH FOUND}#' $ci_file
+    fi
+    ;; # -t option or --global commit.template configuration ?)
+  message)  ;; # -m option
+esac
