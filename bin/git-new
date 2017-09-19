@@ -1,25 +1,43 @@
 #!/bin/bash
-# new [developments|common/release] branch
-[ -z "$BASH_LIB" ] && echo "bashLib path not found" && exit 1
-[ ! -e "$BASH_LIB/lib/helper.inc.sh" ] && echo "helper.inc.sh not found" && exit 1
-[ -e "$BASH_LIB/lib/helper.inc.sh" ] && source "$BASH_LIB/lib/helper.inc.sh"
+# new [feature|release] branch
+# initialy used to make new [developments|common/release] branch with date prefix
+
+quit() {
+  echo -e "$@"
+  exit 1
+}
 
 f() {
-  local dir="${1:-dev}"
+  local dir="${1}"
   shift
-  local d="./" date_format="+%s" here="`basename $(pwd)`"
+  #local d="./" date_format="+%s" here="`basename $(pwd)`"
 
-  case "$here" in
-    billing-manager) date_format="+%Y-%m-%d";;
-    rest-billing-dev|rest-billing-rc|notification) date_format="+%Y%m%d";;
-  esac
+  # switch date format by project
+  #case "$here" in
+  #  billing-manager) date_format="+%Y-%m-%d";;
+  #  rest-billing-dev|rest-billing-rc|notification) date_format="+%Y%m%d";;
+  #esac
 
-  local b="${@}" date="`date "$date_format"`"
+    #| sed 's/[\:{}#@\&é"è'"'"'çàù\/\?\$êûôî-\\\|() \[\]]/_/g' \
+  local b="`echo "${@}" | tr [[:upper:]] [[:lower:]] \
+    | sed 's/[\:{}#@\&é"è'"'"'çàù\/\?\$êûôî\\\|() ]/_/g;' \
+    | sed 's/\[/_/g;s/\]/_/g;s/-/_/g;s/__*/_/g;s/_$//;s/^_//;'`"
+  #local date="`date "$date_format"`"
   [ -z "$dir" -o -z "$b" ] && quit 'I need 2 args : "dir" and "branch name"'
   case $dir in 
-    dev) d='developments/'${date}_${b// /_} ;;
-    rel) d='common/release/'${b// /_} ;;
-    *)   quit "'$dir' : bad value for directory (only 'dev' & 'rel' are allowed)"; exit 1 ;;
+    dev)
+      # developements/ branch starting with date
+      #d='developments/'${date}_${b// /_}
+      # feature/ branch starting with FOB
+      d='feature/'${b}
+    ;;
+    rel)
+      # common/release/ branch
+      #d='common/release/'${b// /_}
+      # release/ branch
+      d='release/'${b}
+    ;;
+    *)   quit "'$dir' : bad value for directory (only 'dev' & 'rel' are allowed)" ;;
 
   esac 
   git checkout -b $d

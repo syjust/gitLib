@@ -1,6 +1,6 @@
 [user]
-  name  = firstname lastname / organisation
-  email = flast@orga.net
+  name  = Sylvain JUST / Micropole
+  email = sjust@micropole.com
 [core]
   editor           = vim
   excludesfile     = ~/.gitLib/conf/ignore_global
@@ -37,7 +37,7 @@
   mine         = br --mine
   m9           = br --mine-porcelain
   m8           = br --mine-short-porcelain
-  dev          = "! git branch -a | grep develop"
+  dev          = "! git branch -a | grep feature"
   rel          = "! git branch -a | grep release"
   relu         = br --release-unmerged # display all released branches unmerged in
 
