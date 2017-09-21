@@ -1,6 +1,6 @@
 [user]
-  name  = Sylvain JUST / Micropole
-  email = sjust@micropole.com
+  name  = firstname lastname / organisation
+  email = flast@orga.net
 [core]
   editor           = vim
   excludesfile     = ~/.gitLib/conf/ignore_global
