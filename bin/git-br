@@ -48,13 +48,25 @@ if [ $shortify -eq 1 ] ; then
 fi
 FORMAT="$REF $AUTH $DATE"
 
+###########################
+# DEFAULT BRANCHES PATHES #
+###########################
+
+#RELEASE="common/release"
+#DEVELOP="develop"
+#FEATURE="developments"
+
+RELEASE="release"
+DEVELOP="master"
+FEATURE="feature"
+
 #####################################
 # define default function by action #
 #####################################
 case "$action" in
   --relu|--release-unmerged)
     f() {
-      $0 --who . remotes/origin/develop refs/remotes/origin/common/release
+      $0 --who . remotes/origin/$DEVELOP refs/remotes/origin/$RELEASE
     }
   ;;
 
@@ -66,12 +78,12 @@ case "$action" in
 
   -w|--who)
     f() {
-      local w="${1}"
-      [ "x*" == "x$w" ] && w=""
-      local b="${2:-remotes/origin/develop}"
-      local path="${3:-refs/remotes/origin/developments}"
-      git for-each-ref --no-merge $b --format="$FORMAT" "$path" \
-        | sort | egrep "$w";
+        local w="${1}"
+        [ "x*" == "x$w" ] && w=""
+        local b="${2:-remotes/origin/$DEVELOP}"
+        local path="${3:-refs/remotes/origin/$FEATURE}"
+        git for-each-ref --no-merge $b --format="$FORMAT" "$path" \
+          | sort | egrep "$w";
     }
   ;;
 
