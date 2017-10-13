@@ -1,5 +1,16 @@
 #!/bin/bash
 NAME="`git config --global user.name | awk '{print $1}'`"
+GIT_VERSION="`git --version | awk '{print $NF}'`"
+MIN_WHO_GIT_VERSION="2.8.0"
+
+quit() {
+    echo -e "$@"
+    exit 1
+}
+version() {
+    local v=$1
+    echo "${v//./}"
+}
 
 ##################
 # preset options #
@@ -78,12 +89,16 @@ case "$action" in
 
   -w|--who)
     f() {
+      if [ `version $GIT_VERSION` -lt `version $MIN_WHO_GIT_VERSION` ] ; then
+        quit "who usage : git version must be at least '$MIN_WHO_GIT_VERSION' - your git is actually '$GIT_VERSION'"
+      else
         local w="${1}"
         [ "x*" == "x$w" ] && w=""
         local b="${2:-remotes/origin/$DEVELOP}"
         local path="${3:-refs/remotes/origin/$FEATURE}"
         git for-each-ref --no-merge $b --format="$FORMAT" "$path" \
           | sort | egrep "$w";
+      fi
     }
   ;;
 
