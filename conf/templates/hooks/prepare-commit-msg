@@ -8,10 +8,17 @@ case $ci_type in
   merge)    ;;
   template|"")
     branch=`git symbolic-ref HEAD 2> /dev/null | sed 's#refs/heads/##'`
+    ref="`git show-branch -a 2>/dev/null | grep '\*' | grep -v "$branch" | head -n1 | sed 's/.*\[\(.*\)\].*/\1/' | sed 's/[\^~].*//'`"
+
     if [ ! -z "$branch" ] ; then
-      sed -i 's#{branch}#'$branch'#' $ci_file
+      sed -i 's#{branch}#'"'$branch'"'#' $ci_file
     else
       sed -i 's#{branch}#{NO BRANCH FOUND}#' $ci_file
+    fi
+    if [ ! -z "$ref" ] ; then
+      sed -i 's#{inherit}#'"'$ref'"'#' $ci_file
+    else
+      sed -i 's#.*{inherit}.*##' $ci_file
     fi
     ;; # -t option or --global commit.template configuration ?)
   message)  ;; # -m option

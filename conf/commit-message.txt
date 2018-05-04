@@ -1,3 +1,4 @@
 
 
 branch:{branch}
+inherit:{inherit}
