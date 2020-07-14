@@ -2,10 +2,12 @@
   name  = firstname lastname / organisation
   email = flast@orga.net
 [core]
-  editor           = vim
-  excludesfile     = ~/.gitLib/conf/ignore_global
-  fileMode         = false
-  sharedRepository = group
+  editor            = vim
+  excludesfile      = ~/.gitLib/conf/ignore_global
+  fileMode          = false
+  sharedRepository  = group
+  precomposeunicode = false
+  quotePath         = false
 [merge]
   tool         = vimdiff
 [alias]
