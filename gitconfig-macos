@@ -18,31 +18,36 @@
   co           = checkout
 
   # STATUS
-  s            = st
-  tst          = st
-  stm          = st --modified
-  sta          = st --added
-  std          = st --deleted
-  s2a          = st --to-add
-  stmv         = st --modifiedv
-  stav         = st --addedv
-  stdv         = st --deletedv
-  s2av         = st --to-addv
+  st           = "!~/.gitLib/bin/git-st"
+  s            = "!~/.gitLib/bin/git-st"
+  tst          = "!~/.gitLib/bin/git-st"
+  stm          = "!~/.gitLib/bin/git-st --modified"
+  sta          = "!~/.gitLib/bin/git-st --added"
+  std          = "!~/.gitLib/bin/git-st --deleted"
+  stu          = "!~/.gitLib/bin/git-st --unmerged"
+  s2a          = "!~/.gitLib/bin/git-st --to-add"
+  stmv         = "!~/.gitLib/bin/git-st --modifiedv"
+  stav         = "!~/.gitLib/bin/git-st --addedv"
+  stdv         = "!~/.gitLib/bin/git-st --deletedv"
+  s2av         = "!~/.gitLib/bin/git-st --to-addv"
 
   # BRANCHES ACTIONS
-  pwd          = br --pwd
-  bra          = br --all
-  who          = br --who
-  whop         = br --who-porcelain
-  old          = br --old-pwd
-  sw           = br --switch
-  swh          = br --switch-history
-  mine         = br --mine
-  m9           = br --mine-porcelain
-  m8           = br --mine-short-porcelain
+  br           = "!~/.gitLib/bin/git-br"
+  brm          = "!~/.gitLib/bin/git-br --rm"
+  pwd          = "!~/.gitLib/bin/git-br --pwd"
+  bra          = "!~/.gitLib/bin/git-br --all"
+  who          = "!~/.gitLib/bin/git-br --who"
+  whop         = "!~/.gitLib/bin/git-br --who-porcelain"
+  old          = "!~/.gitLib/bin/git-br --old-pwd"
+  sw           = "!~/.gitLib/bin/git-br --switch"
+  swh          = "!~/.gitLib/bin/git-br --switch-history"
+  mine         = "!~/.gitLib/bin/git-br --mine"
+  m9           = "!~/.gitLib/bin/git-br --mine-porcelain"
+  m8           = "!~/.gitLib/bin/git-br --mine-short-porcelain"
+  relu         = "!~/.gitLib/bin/git-br --release-unmerged" # display all released branches unmerged in
   dev          = "! git branch -a | grep feature"
   rel          = "! git branch -a | grep release"
-  relu         = br --release-unmerged # display all released branches unmerged in
+  new          = "!~/.gitLib/bin/git-new"
 
   # INDEX
   empty        = "! f(){ git add -N $1; }; f" # new empty file
@@ -50,13 +55,14 @@
   unassume     = update-index --no-assume-unchanged # un-ignore futures modifications
 
   # LOG
-  lg           = l -g
-  la           = l -a
-  lgs          = l -g -s
-  lga          = l -g -a
+  l            = "!~/.gitLib/bin/git-l"
+  lg           = "!~/.gitLib/bin/git-l -g"
+  la           = "!~/.gitLib/bin/git-l -a"
+  lgs          = "!~/.gitLib/bin/git-l -g -s"
+  lga          = "!~/.gitLib/bin/git-l -g -a"
   # log not in origin/develop
-  ln           = l --not
-  lns          = l --not --short
+  ln           = "!~/.gitLib/bin/git-l --not"
+  lns          = "!~/.gitLib/bin/git-l --not --short"
 
   # DIFF & MERGE
   df           = diff -U5
