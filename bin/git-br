@@ -1,7 +1,9 @@
 #!/bin/bash
-NAME="`git config --global user.name | awk '{print $1}'`"
-GIT_VERSION="`git --version | awk '{print $NF}'`"
+NAME="`git config user.email | awk '{print $1}'`"
+GIT_VERSION="`git --version | awk '{print $3}'`"
 MIN_WHO_GIT_VERSION="2.8.0"
+UNAME="`uname`"
+[ -z "$GIT_ORIGIN" ] && GIT_ORIGIN="origin"
 
 quit() {
     echo -e "$@"
@@ -47,11 +49,11 @@ done
 if [ $porcelainify -eq 1 ] ; then
   #'%(refname:short) <%(authorname)> (%(committerdate:short))'
   REF='%(refname:short)'
-  AUTH='<%(authorname)>'
+  AUTH='%(authoremail)'
   DATE='(%(committerdate:short))'
 else
   REF='%(color:yellow)%(refname:short)%(color:reset)'
-  AUTH='%(color:bold blue)<%(authorname)>%(color:reset)'
+  AUTH='%(color:bold blue)%(authoremail)%(color:reset)'
   DATE='%(color:green)(%(committerdate:short))%(color:reset)'
 fi
 if [ $shortify -eq 1 ] ; then
@@ -63,13 +65,9 @@ FORMAT="$REF $AUTH $DATE"
 # DEFAULT BRANCHES PATHES #
 ###########################
 
-#RELEASE="common/release"
-#DEVELOP="develop"
-#FEATURE="developments"
-
-RELEASE="release"
-DEVELOP="master"
-FEATURE="feature"
+[ -z "$GIT_RELEASE" ] && GIT_RELEASE="release"
+[ -z "$GIT_DEVELOP" ] && GIT_DEVELOP="develop"
+[ -z "$GIT_FEATURE" ] && GIT_FEATURE="feature"
 
 #####################################
 # define default function by action #
@@ -77,7 +75,7 @@ FEATURE="feature"
 case "$action" in
   --relu|--release-unmerged)
     f() {
-      $0 --who . remotes/origin/$DEVELOP refs/remotes/origin/$RELEASE
+      $0 --who . remotes/$GIT_ORIGIN/$GIT_DEVELOP refs/remotes/$GIT_ORIGIN/$GIT_RELEASE
     }
   ;;
 
@@ -94,19 +92,19 @@ case "$action" in
       else
         local w="${1}"
         [ "x*" == "x$w" ] && w=""
-        local b="${2:-remotes/origin/$DEVELOP}"
-        local path="${3:-refs/remotes/origin/$FEATURE}"
+        local b="${2:-remotes/$GIT_ORIGIN/$GIT_DEVELOP}"
+        local path="${3:-refs/remotes/$GIT_ORIGIN/$GIT_FEATURE}"
         git for-each-ref --no-merge $b --format="$FORMAT" "$path" \
           | sort | egrep "$w";
       fi
     }
   ;;
 
-  #m9 shortified (without origin / without name)
+  #m9 shortified (without $GIT_ORIGIN / without name)
   --m8|--mine-short-porcelain)
     f() {
       $0 --who --porcelain --short "$NAME" "$1" \
-        | sed 's_^origin/\([^[:blank:]]*\).*$_\1_'
+        | sed 's_^'$GIT_ORIGIN'/\([^[:blank:]]*\).*$_\1_'
     }
   ;;
 
@@ -132,13 +130,14 @@ case "$action" in
 
   --swh|--history|--switch-history)
     f() {
-      [ -x "$BASH_LIB/bin/odd-color.sh" ] \
-        && output="$BASH_LIB/bin/odd-color.sh" \
-        || output="cat"
+      local output="$BASH_LIB/bin/odd-color.sh"
+      local cat_opt="--number"
+      [[ -x "$output" ]] || output="cat"
+      [[ "x$UNAME" == "xDarwin" ]] && cat_opt="-n"
       git reflog \
         | awk '$3 ~ /checkout/ {print $1": checkout from "$6}' \
         | head -n40 \
-        | cat --number \
+        | cat "$cat_opt" \
         | $output
       }
   ;;
@@ -161,12 +160,19 @@ case "$action" in
 
   -a)
     f() {
-      local path='refs/remotes/origin/'
-      echo "# remotes/origin/* refs"
+      local path="refs/remotes/$GIT_ORIGIN/"
+      echo "# remotes/$GIT_ORIGIN/* refs"
       git for-each-ref --format="$FORMAT" "$path" | sort;
     }
   ;;
 
+  --rm)
+    f() {
+        local branch=$1
+        git branch -d $1 \
+            && git push $GIT_ORIGIN :$1
+    }
+  ;;
   *)
     f() {
       git branch $action $@
