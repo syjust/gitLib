@@ -23,6 +23,7 @@
   stm          = st --modified
   sta          = st --added
   std          = st --deleted
+  stu          = st --unmerged
   s2a          = st --to-add
   stmv         = st --modifiedv
   stav         = st --addedv
@@ -30,6 +31,7 @@
   s2av         = st --to-addv
 
   # BRANCHES ACTIONS
+  brm          = br --rm
   pwd          = br --pwd
   bra          = br --all
   who          = br --who
@@ -40,9 +42,9 @@
   mine         = br --mine
   m9           = br --mine-porcelain
   m8           = br --mine-short-porcelain
+  relu         = br --release-unmerged # display all released branches unmerged in
   dev          = "! git branch -a | grep feature"
   rel          = "! git branch -a | grep release"
-  relu         = br --release-unmerged # display all released branches unmerged in
 
   # INDEX
   empty        = "! f(){ git add -N $1; }; f" # new empty file
