@@ -9,6 +9,7 @@
   precomposeunicode = false
   quotePath         = false
 [merge]
+  commit       = no
   tool         = vimdiff
 [alias]
   # BASICS
@@ -66,10 +67,12 @@
   mgn          = merge -X ignore-space-change -X ignore-all-space -X ignore-space-at-eol --no-commit
   mgt          = mergetool -y
   mga          = merge --abort
+  mgc          = merge --continue
   
   # PUSH
   pushf        = push --force
-  pushu        = "!git push --set-upstream origin `git pwd`"
+  pushu        = "! f(){ git push --set-upstream ${1:-origin} `git pwd`; }; f"
+  setu         = "! f(){ local branch=${2:-`git pwd`} ; git branch --set-upstream-to=${1:-origin}/${branch} ${branch}; }; f"
 
   # ADVANCED REBASE ALIASES
   rb           = rebase -X ignore-space-change -X ignore-all-space -X ignore-space-at-eol -X ignore-blank-lines -X "diff-algorithm=histogram"
@@ -94,6 +97,7 @@
   # ADVANCED STASH COMMANDS
   sts          = stash --keep-index
   pop          = stash pop
+  drop         = "! f(){ local _stash=${1:-0} ; git stash drop stash@{$_stash}}; }; f"
   save         = "! f() { local mess=\"$@\"; while [ -z \"$mess\" ] ; do echo -n \"give me a message : \" && read mess; done; git stash save -u \"$mess\"; }; f"
   ls           = stash list
   list         = stash list
