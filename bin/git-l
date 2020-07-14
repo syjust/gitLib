@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DEFAULT_LOG_OPTIONS="--abbrev=8 --abbrev-commit --date=iso"
-FORMAT="format:%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset"
+FORMAT="format:%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%aN>%Creset"
 
 log_options=""
 short=0
