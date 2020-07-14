@@ -113,6 +113,7 @@
   diff         = auto
   status       = auto
   interactive  = auto
+  ui           = auto
 [pull]
   default      = simple
 [push]
@@ -121,3 +122,7 @@
   template     = ~/.gitLib/conf/commit-message.txt
 [init]
   templatedir  = ~/.gitLib/conf/templates/
+[rerere]
+  enabled      = true
+[tag]
+  sort         = version:refname
